@@ -18,7 +18,16 @@ def scan_line( filename, line, rules ):
         match = re.search(rule["regex"], line)
         if match:
             print("*************************************************************")
-            print("Found " + rule["id"] + "in " + filename )
+            print("Found " + rule["id"] + " in file " + filename )
+            if rule["id"] == "GitHub access token":
+                token = line[match.regs[0][0]:match.regs[0][1]]
+                print("This is it: " + token)
+                h = Github(token)
+                user = h.get_user( )
+                try:
+                    print("This token is valid and belongs to " + user.login + "\n\n")
+                except:
+                    print("Mate, this token does not appear to be valid!\n\n")
 
 
 def scan_diff( diff, rules ):
@@ -57,8 +66,15 @@ def process_repo( token, repo ):
         print("----------------------------------------")
 
 
+def test_github_access_token( ):
+    line = "token = ghp_donkeyChickenMouseNoodleCowPigZebras;"  # fake token, can our scanner verify that?
+    filename = "test.c"
+    rules = read_rules("rules.json")
+    scan_line( filename, line, rules )
+
 
 if __name__ == "__main__":
+
     if 'token' in os.environ:
         token = os.environ['token']
     else:
@@ -66,7 +82,7 @@ if __name__ == "__main__":
         print("try: export token=...")
         sys.exit()
 
-    if 'repo' in os.environ:
+    if 'repo' in os.environ:        # make this command line, not env variable
         repo = os.environ['repo']
     else:
         repo = None
