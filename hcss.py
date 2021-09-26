@@ -74,6 +74,16 @@ def test_github_access_token( ):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("usage: python3 " + sys.argv[0] + " [repo_url]")
+        sys.exit()
+    else:
+        repo = sys.argv[1]
+        if repo[0:19] == "https://github.com/":
+            repo = repo[19:]
+        if repo[0:18] == "http://github.com/":
+            repo = repo[18:]
+        print(repo)
 
     if 'token' in os.environ:
         token = os.environ['token']
@@ -81,11 +91,6 @@ if __name__ == "__main__":
         print("I require an access token to work")
         print("try: export token=...")
         sys.exit()
-
-    if 'repo' in os.environ:        # make this command line, not env variable
-        repo = os.environ['repo']
-    else:
-        repo = None
 
     process_repo(token, repo)
 
