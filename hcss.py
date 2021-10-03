@@ -13,14 +13,14 @@ def read_rules( rulesfile ):
     return rules
 
 
-def scan_line( filename, line, rules ):
+def scan_chunk( filename, chunk, rules ):
     for rule in rules["rules"]:
-        match = re.search(rule["regex"], line)
+        match = re.search(rule["regex"], chunk)
         if match:
             print("*************************************************************")
             print("Found " + rule["id"] + " in file " + filename )
             if rule["id"] == "GitHub access token":
-                token = line[match.regs[0][0]:match.regs[0][1]]
+                token = chunk[match.regs[0][0]:match.regs[0][1]]
                 print("This is it: " + token)
                 h = Github(token)
                 user = h.get_user( )
@@ -33,12 +33,21 @@ def scan_line( filename, line, rules ):
 def scan_diff( diff, rules ):
     diff = diff.splitlines()
     filename = "undef"
+    chunk = ""
     for line in diff:
-        if line[0:4] == '+++ ':
+        if line[0:4] == '+++ ':         # file where lines are added
             filename = line[4:]
+            chunk = ""
             print("File: " + filename)
+        elif line[0:4] == '--- ':       # previous file
+            continue
+        elif line[0:2] == "@@":         # line numbers before and after
+            continue
         elif line[0] == '+':
-            scan_line( filename, line[1:], rules )
+            chunk = chunk + line[1:] + "\n"
+        elif chunk != "":
+            scan_chunk( filename, chunk, rules )
+            chunk = ""
 
 
 def process_repo( token, repo ):
