@@ -6,6 +6,7 @@ import json
 import re
 
 
+
 def read_rules( rulesfile ):
     with open(rulesfile, 'r') as f:
         rules = json.loads( f.read() )
@@ -14,15 +15,18 @@ def read_rules( rulesfile ):
 
 
 def scan_chunk( filename, chunk, rules ):
+    if (len(chunk) > 8192):
+        print("Skipping large chunk of length " + str(len(chunk)))
+        return
     for rule in rules["rules"]:
         match = re.search(rule["regex"], chunk)
         if match:
+            key = chunk[match.regs[0][0]:match.regs[0][1]]  # remark: there may be more than one, need to dump all of them!
             print("*************************************************************")
             print("Found " + rule["id"] + " in file " + filename )
+            print(key)
             if rule["id"] == "GitHub access token":
-                token = chunk[match.regs[0][0]:match.regs[0][1]]
-                print("This is it: " + token)
-                h = Github(token)
+                h = Github(key)
                 user = h.get_user( )
                 try:
                     print("This token is valid and belongs to " + user.login + "\n\n")
@@ -43,7 +47,7 @@ def scan_diff( diff, rules ):
             continue
         elif line[0:2] == "@@":         # line numbers before and after
             continue
-        elif line[0] == '+':
+        elif line[0:1] == '+':
             chunk = chunk + line[1:] + "\n"
         elif chunk != "":
             scan_chunk( filename, chunk, rules )
@@ -92,6 +96,8 @@ if __name__ == "__main__":
             repo = repo[19:]
         if repo[0:18] == "http://github.com/":
             repo = repo[18:]
+        if repo[-1] == '/':
+            repo = repo[0:-1]       # no trailing slash allowed
         print(repo)
 
     if 'token' in os.environ:
