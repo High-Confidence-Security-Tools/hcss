@@ -15,26 +15,30 @@ def read_rules( rulesfile ):
 
 
 def scan_chunk( filename, chunk, rules ):
-    if (len(chunk) > 8192):
-        print("Skipping large chunk of length " + str(len(chunk)))
-        return
+    results = []
     for rule in rules["rules"]:
-        match = re.search(rule["regex"], chunk)
+        match = re.findall(rule["regex"], chunk)
         if match:
-            key = chunk[match.regs[0][0]:match.regs[0][1]]  # remark: there may be more than one, need to dump all of them!
-            print("*************************************************************")
-            print("Found " + rule["id"] + " in file " + filename )
-            print(key)
-            if rule["id"] == "GitHub access token":
-                h = Github(key)
-                user = h.get_user( )
-                try:
-                    print("This token is valid and belongs to " + user.login + "\n\n")
-                except:
-                    print("Mate, this token does not appear to be valid!\n\n")
+            for secret in match:
+                result = { "rule": rule["id"], "file": filename, "secret": secret, "confirmed": False }
+                print("*************************************************************")
+                print("Found " + rule["id"] + " in file " + filename )
+                print(secret)
+                if rule["id"] == "GitHub access token":
+                    h = Github(secret)
+                    user = h.get_user( )
+                    try:
+                        print("This token is valid and belongs to " + user.login + "\n\n")
+                        result["confirmed"]=True
+                    except:
+                        print("Mate, this token does not appear to be valid, so I will not record it!\n\n")
+                        continue
+                results.append(result)
+    return results
 
 
 def scan_diff( diff, rules ):
+    all_results = []
     diff = diff.splitlines()
     filename = "undef"
     chunk = ""
@@ -50,8 +54,10 @@ def scan_diff( diff, rules ):
         elif line[0:1] == '+':
             chunk = chunk + line[1:] + "\n"
         elif chunk != "":
-            scan_chunk( filename, chunk, rules )
+            results = scan_chunk( filename, chunk, rules )
+            all_results = all_results + results
             chunk = ""
+    return all_results
 
 
 def process_repo( token, repo ):
@@ -70,13 +76,23 @@ def process_repo( token, repo ):
     rules = read_rules("rules.json")
     print("Rules loaded.")
 
+    all_results = []
     for commit in repo.get_commits( ):
         # print(commit)
         diff_url = commit.html_url+".diff"
         print(diff_url)
         r = requests.get( diff_url )
-        scan_diff( r.text, rules )
+        diff_text = r.text
+        if len(diff_text) < 1048576:
+            results = scan_diff( r.text, rules )
+            # TODO: insert commit URL into each result
+            for result in results:
+                result["commit_url"] = commit.html_url
+            all_results = all_results + results
+        else:
+            print("Diff is huge, will skip this one")
         print("----------------------------------------")
+    return all_results
 
 
 def test_github_access_token( ):
@@ -84,6 +100,16 @@ def test_github_access_token( ):
     filename = "test.c"
     rules = read_rules("rules.json")
     scan_line( filename, line, rules )
+
+
+def output_results( results ):
+    if results == []:
+        print("\nMate, I tried the best I could, but couldn't find any secrets :-(\n")
+    else:
+        print("\n*** Here are the findings: ***\n")
+        for result in results:
+            print( json.dumps(result, indent = 2) )
+            print( "----------------------------------------" )
 
 
 if __name__ == "__main__":
@@ -107,6 +133,7 @@ if __name__ == "__main__":
         print("try: export token=...")
         sys.exit()
 
-    process_repo(token, repo)
+    results = process_repo(token, repo)
+    output_results(results)
 
 
