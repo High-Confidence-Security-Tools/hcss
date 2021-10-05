@@ -1,11 +1,13 @@
 {
     "rules": [
         {
-            "id": "RSA private key",
+            "id": "HCSS-1",
+            "name": "RSA private key",
             "regex": "-----BEGIN RSA PRIVATE KEY-----[0-9a-zA-Zi+\/=\\\"\\s]*-----END RSA PRIVATE KEY-----"
         },
         {
-            "id": "GitHub access token",
+            "id": "HCSS-2",
+            "name": "GitHub access token",
             "regex": "ghp_[0-9a-zA-Z]{35,40}"
         }
     ]
