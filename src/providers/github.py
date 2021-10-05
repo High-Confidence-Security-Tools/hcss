@@ -7,6 +7,20 @@ from scanner import scan_diff
 from rules import read_rules
 
 def process_repo( token, repo ):
+    """ 
+    Process a Github Repo
+
+    Iterate through the commits looking for keys
+
+    Parameters:
+    token (string): Github token
+    repo (string): Name of repository
+
+    Returns:
+    list: Containing all results
+    """
+
+
     # login to github with our token
     g = Github(token)
 
