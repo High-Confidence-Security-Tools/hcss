@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import json
 import os
 import sys
@@ -34,7 +34,7 @@ def github_post_webhook():
     # TODO: verify signature
     content = request.get_json()
     if content is None:
-        return json.dumps({'message':'No Content'}), 204, {'ContentType':'application/json'}
+        return jsonify({'message':'No Content'}), 204
     
     if 'commits' in content:
         all_results = []
@@ -45,9 +45,9 @@ def github_post_webhook():
             all_results = all_results + results
         output_results(all_results)
         # print(json.dumps( content["commits"], indent = 2))
-        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+        return jsonify({'success':True}), 200
     else:
-        return json.dumps({'message':'No Content'}), 204, {'ContentType':'application/json'}
+        return jsonify({'message':'No Content'}), 204
 
 
 ### This is here to support deployment of the tool on a Google Cloud Function.
@@ -56,7 +56,7 @@ def github_post_webhook_gcp_cf(request):
     # TODO: verify signature
     content = request.get_json()
     if content is None:
-        return json.dumps({'message':'No Content'}), 204, {'ContentType':'application/json'}
+        return jsonify({'message':'No Content'}), 204
     
     if 'commits' in content:
 
@@ -68,7 +68,6 @@ def github_post_webhook_gcp_cf(request):
             all_results = all_results + results
         output_results(all_results)
         # print(json.dumps( content["commits"], indent = 2))
-        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+        return jsonify({'success':True}), 200
     else:
-        return json.dumps({'message':'No Content'}), 204, {'ContentType':'application/json'}
-
+        return jsonify({'message':'No Content'}), 204
