@@ -2,7 +2,18 @@ from github import Github
 
 
 def rsa_private_key(secret):
-    """ Validate HCSS-1 """
+    """ 
+    Validate HCSS-1
+
+    Checks whether the discovered secret is a valid RSA key
+
+    Parameters:
+    secret (string): Secret to check
+
+    Returns:
+    bool: Whether it is valid or not
+    """
+
     # TODO replace with actual RSA key validation
     try:
         if 'RSA' in secret:
@@ -11,7 +22,18 @@ def rsa_private_key(secret):
         return False
 
 def github_access_token(secret):
-    """ Validate HCSS-2 """
+    """ 
+    Validate HCSS-2 
+    
+    Checks whether the discovered secret is valid on Github.com
+
+    Parameters:
+    secret (string): Secret to check
+
+    Returns:
+    bool: Whether it is valid or not
+    """
+
     try:
         h = Github(secret)
         user = h.get_user( )

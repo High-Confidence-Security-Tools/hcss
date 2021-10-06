@@ -33,7 +33,12 @@ if __name__ == "__main__":
         token = os.environ['token']
     else:
         print("I require an access token to work")
-        print("try: export token=...")
+        if os.name == "posix":
+            print("try: export token=...")
+        elif os.name == "nt":
+            print("try: $env:token=...")
+        else:
+            print("Please set an environment variable for 'token'. i.e. token=...")
         sys.exit()
 
     results = process_repo(token, url_path)
