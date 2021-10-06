@@ -1,11 +1,11 @@
 import re
 
 from providers import github
-
+from providers import bitbucket
 
 providers = {
     "github.com": github.process_repo,
-    "bitbucket.org": "placeholder"
+    "bitbucket.org": bitbucket.process_repo
 }
 
 def parse_provider(repo_url):
