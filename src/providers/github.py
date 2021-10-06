@@ -7,6 +7,18 @@ from scanner import scan_diff
 from rules import read_rules
 
 def process_single_commit( token, commit_url ):
+    """ 
+    Process a single commit
+
+    Review all the changes within a single commit and report any findings
+
+    Parameters:
+        token (string): Github token
+        commit_url (string): URL to the commit
+
+    Returns:
+        list: Containing all results
+    """
 
     # print(commit)
     diff_url = commit_url + ".diff"
