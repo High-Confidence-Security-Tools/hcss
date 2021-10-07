@@ -71,6 +71,11 @@ def github_post_webhook_gcp_cf(request):
     if content is None:
         return jsonify({'message':'No Content'}), 204
     
+    headers_list = request.headers
+    if headers_list is not None:
+        if 'X-GitHub-Event' in headers_list:
+            print(f"GitHub Event: {headers_list['X-GitHub-Event']}")
+
     if 'commits' in content:
         all_results = []
         for commit in content["commits"]:
