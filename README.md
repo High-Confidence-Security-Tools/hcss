@@ -9,6 +9,13 @@ Plus, there's more!  Stay tuned....
 * Have pipenv installed (`pip3 install pipenv`)
 
 **Steps:**
+* Set required environment variables:
+```
+export GITHUB_TOKEN=<personal access token>
+export BITBUCKET_USERNAME=<username>
+export BITBUCKET_PASSWORD=<app password>
+```
+
 * Setup virtualenv and install dependencies
 ```
 pipenv install
@@ -17,4 +24,9 @@ pipenv install
 * Shell into virtualenv
 ```
 pipenv shell
+```
+
+* Start Flask server
+```
+python3 src/app.py
 ```
