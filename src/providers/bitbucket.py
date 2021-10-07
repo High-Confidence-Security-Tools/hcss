@@ -34,17 +34,9 @@ def process_repo( webhook ):
 
             results = scan_diff(diff_text)
             for result in results:
-                results["commit_url"] = commit['diff_url']
-                all_results.append(results)
+                result["commit_url"] = commit['diff_url']
+                all_results.append(result)
         else:
             print("Diff is huge, will skip this one")
         print("----------------------------------------")
     return all_results
-
-# Just for testing
-if __name__ == "__main__":
-    import json
-    with open('src/providers/bitbucket_webhook.json', 'r') as fh:
-        webhook = json.load(fh)
-    
-    process_repo(webhook)
