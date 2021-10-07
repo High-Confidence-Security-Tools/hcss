@@ -21,8 +21,6 @@ def offset_within_chunk( secret, chunk):
     index2 = secret_to_end_of_chunk.index( last_part_of_secret )    # we found the last line of the secret
     remaining_lines = len( secret_to_end_of_chunk[0:index2].splitlines() )
     
-    dummy_key_for_testing123 = "can you find this secret?"
-
     return lines_up_to_secret - 2 + remaining_lines
 
 
