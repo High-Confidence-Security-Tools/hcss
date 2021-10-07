@@ -13,7 +13,6 @@ def leave_comment_on_commit( token, commit_url, path, position, comment ):
     repo = commit_url.split('/')[4]
     commit_hash = commit_url.split('/')[6]
     api_url = 'https://api.github.com/repos/' + org + '/' + repo + '/commits/' + commit_hash + '/comments'
-    # dummy_key_for_testing_hahahahah can't find me
     print(api_url)
     payload = {'body': comment, 'path': path, 'position':position}
     headers = {'user-agent': 'hcss', 'Accept': 'application/vnd.github.v3+json', 'Authorization': 'token ' + token }
