@@ -2,7 +2,7 @@ from re import I
 
 from github import Github
 import requests
-
+import json
 from scanner import scan_diff
 from rules import read_rules
 
