@@ -2,9 +2,26 @@ from re import I
 
 from github import Github
 import requests
-
+import json
 from scanner import scan_diff
 from rules import read_rules
+
+
+# Github API: https://docs.github.com/en/rest/reference/repos#create-a-commit-comment
+def leave_comment_on_commit( token, commit_url, path, position, comment ):
+    org = commit_url.split('/')[3]
+    repo = commit_url.split('/')[4]
+    commit_hash = commit_url.split('/')[6]
+    api_url = 'https://api.github.com/repos/' + org + '/' + repo + '/commits/' + commit_hash + '/comments'
+    print(api_url)
+    payload = {'body': comment, 'path': path, 'position':position}
+    headers = {'user-agent': 'hcss', 'Accept': 'application/vnd.github.v3+json', 'Authorization': 'token ' + token }
+    r = requests.post(api_url, json=payload, headers=headers)
+
+
+
+# example: leave_comment_on_commit( token, 'https://github.com/High-Confidence-Security-Tools/hcss/commit/a259de4a63c23b25160baefa2fcdf727aae2a5bf', "src/hcss.py", 5, "donkey chicken" )
+
 
 def process_single_commit( token, commit_url ):
     """ 
@@ -23,8 +40,8 @@ def process_single_commit( token, commit_url ):
     # print(commit)
     diff_url = commit_url + ".diff"
     print(diff_url)
-    # TODO: token will need to be sent in to access private git repos
-    r = requests.get( diff_url )
+    headers = {'user-agent': 'hcss', 'Authorization': 'token ' + token }
+    r = requests.get( diff_url, headers=headers )
     diff_text = r.text
     if len(diff_text) < 1048576:
         results = scan_diff( r.text )
@@ -71,4 +88,5 @@ def process_repo( token, repo ):
         results = process_single_commit( token, commit.html_url )
         all_results = all_results + results
     return all_results
+
 
