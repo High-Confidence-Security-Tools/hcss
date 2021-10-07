@@ -6,7 +6,7 @@ rules = [
     {
         "id": "HCSS-0",
         "name": "dummy key for testing",
-        "regex": "dummy_[0-9a-zA-Z]*_key_for_testing",
+        "regex": "dummy_key_for_testing[a-zA-Z0-9]*",
         "validate": validate.dummy_key
     },
     {
