@@ -12,6 +12,7 @@ required_vars = [
 for var in required_vars:
     if var not in os.environ:
         raise SystemExit(f'ERROR: Required env variable not set ({var})')
+        #print("Environment variable not available")
     else: # TODO Move github authentication stuff to github provider module
         github_token = os.environ['GITHUB_TOKEN']
 
@@ -70,15 +71,7 @@ def github_post_webhook_gcp_cf(request):
     if content is None:
         return jsonify({'message':'No Content'}), 204
     
-    header_list = request.headers
-    if headers is None:
-        return jsonify({'message':'No Content'}), 204
-
-    if 'X-GitHub-Event' in header_list:
-        print(f"GitHub Action: {header_list['X-GitHub-Event']}")
-
     if 'commits' in content:
-
         all_results = []
         for commit in content["commits"]:
             commit_url = commit["url"]
@@ -90,5 +83,3 @@ def github_post_webhook_gcp_cf(request):
         return jsonify({'success':True}), 200
     else:
         return jsonify({'message':'No Content'}), 204
-
-app.run()
