@@ -43,19 +43,18 @@ def github_post_webhook():
             print(commit_url)
             results = github.process_single_commit( token, commit_url )
             all_results = all_results + results
-        output_results(all_results)
         if all_results != []:
+            print("--------- inline comment on results ----")
             for result in all_results:
                 # leave inline comments
                 commit_url = result["commit_url"]
                 path = result["file"][2:]   # the diff starts out with "b/", so remove that part
                 print( "path is : " + path )
-                secret = dummy_abc_key_for_testing
                 position = result["position"]
-                secret2 = dummy_key_for_testing
+                secret2 = dummy_dummy_key_for_testing
                 comment = "Good Lord, do you realise what you have done?!  Please do not commit secrets to source code repositories!  You better revoke this right now, as I promise you that people seeing this are in the process of hacking it!"
                 github.leave_comment_on_commit( token, commit_url, path, position, comment)
-        # print(json.dumps( content["commits"], indent = 2))
+        output_results(all_results)
         return jsonify({'success':True}), 200
     else:
         return jsonify({'message':'No Content'}), 204
