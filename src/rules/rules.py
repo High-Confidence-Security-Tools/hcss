@@ -4,6 +4,12 @@ from rules import validate
 
 rules = [
     {
+        "id": "HCSS-0",
+        "name": "dummy key for testing",
+        "regex": "dummy_[0-9a-zA-Z]*_key_for_testing",
+        "validate": validate.dummy_key
+    },
+    {
         "id": "HCSS-1",
         "name": "RSA private key",
         "regex": "-----BEGIN RSA PRIVATE KEY-----[0-9a-zA-Zi+\/=\\\"\\s]*-----END RSA PRIVATE KEY-----",

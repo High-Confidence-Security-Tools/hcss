@@ -1,6 +1,22 @@
 from github import Github
 
 
+def dummy_key(secret):
+    """ 
+    Validate HCSS-0
+
+    This is a dummy key for testing so always returns true
+
+    Parameters:
+    secret (string): Secret to check
+
+    Returns:
+    bool: Whether it is valid or not
+    """
+
+    return True
+
+
 def rsa_private_key(secret):
     """ 
     Validate HCSS-1
