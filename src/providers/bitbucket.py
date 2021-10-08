@@ -31,7 +31,7 @@ def leave_comment_on_commit( bitbucket_username, bitbucket_password, repo_full_n
         logger.error(f'ERROR: Failed to post comment on commit {err}')
 
 
-def process_repo( webhook ):
+def process_repo( webhook, leave_comments=False ):
     commits = []
     try:
         webhook_commits = webhook['push']['changes'][0]['commits']
@@ -59,16 +59,17 @@ def process_repo( webhook ):
             logger.info("Diff is huge, will skip this one")
         logger.info("----------------------------------------")
 
-    if all_results != []:
-        repo_full_name = webhook['repository']['full_name']
+    if leave_comments:
+        if all_results != []:
+            repo_full_name = webhook['repository']['full_name']
 
-        logger.info("--------- inline comment happening on results ----")
-        for result in all_results:
-            # leave inline comments
-            commit_hash = result["commit_hash"]
-            path = result["file"][2:]   # the diff starts out with "b/", so remove that part
-            position = result["position"]
-            comment = "Good Lord, do you realise what you have done?!  Please do not commit secrets to source code repositories!  You better revoke this right now, as I promise you that people seeing this are in the process of hacking it!"
-            leave_comment_on_commit( bitbucket_username, bitbucket_password, repo_full_name, commit_hash, path, position, comment )
+            logger.info("--------- inline comment happening on results ----")
+            for result in all_results:
+                # leave inline comments
+                commit_hash = result["commit_hash"]
+                path = result["file"][2:]   # the diff starts out with "b/", so remove that part
+                position = result["position"]
+                comment = "Good Lord, do you realise what you have done?!  Please do not commit secrets to source code repositories!  You better revoke this right now, as I promise you that people seeing this are in the process of hacking it!"
+                leave_comment_on_commit( bitbucket_username, bitbucket_password, repo_full_name, commit_hash, path, position, comment )
 
     return all_results

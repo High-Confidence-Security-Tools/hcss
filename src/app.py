@@ -73,7 +73,7 @@ def bitbucket_post_webhook():
     if content is None:
         return jsonify({'message':'No Content'}), 204
     else:
-        all_results = bitbucket.process_repo(content)
+        all_results = bitbucket.process_repo(content, leave_comments=True)
         output_results(all_results)
         return jsonify({'success':True}), 200
 
