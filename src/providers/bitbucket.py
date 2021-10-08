@@ -68,8 +68,20 @@ def process_repo( webhook, leave_comments=False ):
                 # leave inline comments
                 commit_hash = result["commit_hash"]
                 path = result["file"][2:]   # the diff starts out with "b/", so remove that part
-                position = result["position"]
-                comment = "Good Lord, do you realise what you have done?!  Please do not commit secrets to source code repositories!  You better revoke this right now, as I promise you that people seeing this are in the process of hacking it!"
+                position = result["position"] + 1 # TODO fix off by one
+
+                if result["confirmed"] == True:
+                    validation_comment = "VALIDATION CHECK: Secret is currently still valid"
+                elif not result["confirmed"]:
+                    validation_comment = "VALIDATION CHECK: Secret is no longer valid"
+                elif result["confirmed"] == "N/A":
+                    validation_comment = ""
+
+                comment = f"""WARNING: Good Lord, do you realise what you have done?! 
+                \nPlease do not commit secrets to source code repositories!
+                \nYou better revoke this right now, as I promise you that people seeing this are in the process of hacking it!
+                \n{validation_comment}
+                """
                 leave_comment_on_commit( bitbucket_username, bitbucket_password, repo_full_name, commit_hash, path, position, comment )
 
     return all_results
