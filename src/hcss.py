@@ -7,6 +7,7 @@ from argparse import ArgumentParser
 
 from providers import parse_provider
 
+dummy_secret_for_testing46364 = "and most of all, Csaba is my hero"
 
 def parse_args():
     parser = ArgumentParser(description='Search for secrets with high confidence')
