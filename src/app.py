@@ -54,7 +54,7 @@ def github_post_webhook():
                 path = result["file"][2:]   # the diff starts out with "b/", so remove that part
                 position = result["position"]
                 comment = "Good Lord, do you realise what you have done?!  Please do not commit secrets to source code repositories!  You better revoke this right now, as I promise you that people seeing this are in the process of hacking it!"
-                github.leave_comment_on_commit( token, commit_url, path, position, comment)
+                github.leave_comment_on_commit( github_token, commit_url, path, position, comment)
         output_results(all_results)
         return jsonify({'success':True}), 200
     else:
@@ -90,5 +90,3 @@ def github_post_webhook_gcp_cf(request):
         return jsonify({'success':True}), 200
     else:
         return jsonify({'message':'No Content'}), 204
-
-app.run()

@@ -28,5 +28,5 @@ pipenv shell
 
 * Start Flask server
 ```
-python3 src/app.py
+FLASK_APP=src/app.py FLASK_ENV=development flask run
 ```
