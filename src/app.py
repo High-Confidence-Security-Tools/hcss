@@ -20,7 +20,7 @@ required_vars = [
 ]
 for var in required_vars:
     if var not in os.environ:
-        raise SystemExit(f'ERROR: Required env variable not set ({var})')
+        raise SystemExit(f'Required env variable not set ({var})')
     else: # TODO Move github authentication stuff to github provider module
         github_token = os.environ['GITHUB_TOKEN']
 

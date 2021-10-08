@@ -13,7 +13,7 @@ def retrieve_auth():
         bitbucket_username = environ['BITBUCKET_USERNAME']
         bitbucket_password = environ['BITBUCKET_PASSWORD']
     except KeyError as err:
-        logger.error(f'ERROR: Required env variable not set ({err})')
+        logger.error(f'Required env variable not set ({err})')
     return bitbucket_username, bitbucket_password
 
 
@@ -28,7 +28,7 @@ def leave_comment_on_commit( bitbucket_username, bitbucket_password, repo_full_n
     try:
         response.raise_for_status()
     except requests.RequestException as err:
-        logger.error(f'ERROR: Failed to post comment on commit {err}')
+        logger.error(f'Failed to post comment on commit {err}')
 
 
 def process_repo( webhook, leave_comments=False ):
@@ -42,7 +42,7 @@ def process_repo( webhook, leave_comments=False ):
                 'diff_url': webhook_commit['links']['diff']['href'],
             })
     except KeyError as err:
-        logger.error(f'ERROR: Key missing in bitbucket webhook payload ({err})')
+        logger.error(f'Key missing in bitbucket webhook payload ({err})')
 
     bitbucket_username, bitbucket_password = retrieve_auth()
     all_results = []

@@ -23,7 +23,7 @@ def leave_comment_on_commit( token, commit_url, path, position, comment ):
     try:
         response.raise_for_status()
     except requests.RequestException as err:
-        logger.error(f'ERROR: Failed to post comment on commit {err}')
+        logger.error(f'Failed to post comment on commit {err}')
 
 
 # example: leave_comment_on_commit( token, 'https://github.com/High-Confidence-Security-Tools/hcss/commit/a259de4a63c23b25160baefa2fcdf727aae2a5bf', "src/hcss.py", 5, "donkey chicken" )
