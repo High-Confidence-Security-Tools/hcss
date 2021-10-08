@@ -1,16 +1,19 @@
 from os import environ
+import logging
 
 import requests
 
 from scanner import scan_diff
 
 
+logger = logging.getLogger(__name__)
+
 def retrieve_auth():
     try:
         bitbucket_username = environ['BITBUCKET_USERNAME']
         bitbucket_password = environ['BITBUCKET_PASSWORD']
     except KeyError as err:
-        raise SystemExit(f'ERROR: Required env variable not set ({err})')
+        logger.error(f'ERROR: Required env variable not set ({err})')
     return bitbucket_username, bitbucket_password
 
 
@@ -25,7 +28,7 @@ def leave_comment_on_commit( bitbucket_username, bitbucket_password, repo_full_n
     try:
         response.raise_for_status()
     except requests.RequestException as err:
-        print(f'ERROR: Failed to post comment on commit {err}')
+        logger.error(f'ERROR: Failed to post comment on commit {err}')
 
 
 def process_repo( webhook ):
@@ -39,7 +42,7 @@ def process_repo( webhook ):
                 'diff_url': webhook_commit['links']['diff']['href'],
             })
     except KeyError as err:
-        raise SystemExit(f'ERROR: Key missing in bitbucket webhook payload ({err})')
+        logger.error(f'ERROR: Key missing in bitbucket webhook payload ({err})')
 
     bitbucket_username, bitbucket_password = retrieve_auth()
     all_results = []
@@ -53,13 +56,13 @@ def process_repo( webhook ):
                 result["commit_hash"] = commit['hash']
                 all_results.append(result)
         else:
-            print("Diff is huge, will skip this one")
-        print("----------------------------------------")
+            logger.info("Diff is huge, will skip this one")
+        logger.info("----------------------------------------")
 
     if all_results != []:
         repo_full_name = webhook['repository']['full_name']
 
-        print("--------- inline comment happening on results ----")
+        logger.info("--------- inline comment happening on results ----")
         for result in all_results:
             # leave inline comments
             commit_hash = result["commit_hash"]

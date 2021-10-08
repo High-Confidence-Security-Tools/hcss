@@ -1,8 +1,17 @@
-from flask import Flask, request, jsonify
 import json
 import os
+import logging
+
 from providers import github
+
+from flask import Flask, request, jsonify
 from providers import bitbucket
+
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 required_vars = [
     'GITHUB_TOKEN',
@@ -17,13 +26,12 @@ for var in required_vars:
 
 def output_results( results ):
     if results == []:
-        print("\nMate, I tried the best I could, but couldn't find any secrets :-(\n")
+        logging.info("Mate, I tried the best I could, but couldn't find any secrets :-(")
     else:
-        print("\n*** Here are the findings: ***\n")
+        logging.info("*** Here are the findings: ***")
         for result in results:
-            print( json.dumps(result, indent = 2) )
-            print( "----------------------------------------" )
-
+            logging.info( json.dumps(result, indent = 2) )
+            logging.info( "----------------------------------------" )
 
 app = Flask(__name__)
 
@@ -43,11 +51,10 @@ def github_post_webhook():
         all_results = []
         for commit in content["commits"]:
             commit_url = commit["url"]
-            print(commit_url)
             results = github.process_single_commit( github_token, commit_url )
             all_results = all_results + results
         if all_results != []:
-            print("--------- inline comment happening on results ----")
+            logging.info("--------- inline comment happening on results ----")
             for result in all_results:
                 # leave inline comments
                 commit_url = result["commit_url"]
@@ -82,11 +89,11 @@ def github_post_webhook_gcp_cf(request):
         all_results = []
         for commit in content["commits"]:
             commit_url = commit["url"]
-            print(commit_url)
             results = github.process_single_commit( github_token, commit_url )
             all_results = all_results + results
         output_results(all_results)
-        # print(json.dumps( content["commits"], indent = 2))
         return jsonify({'success':True}), 200
     else:
         return jsonify({'message':'No Content'}), 204
+
+#if __name__ == '__main__':

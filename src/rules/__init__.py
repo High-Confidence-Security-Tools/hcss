@@ -1,4 +1,8 @@
 import json
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 def read_rules( rulesfile="src/rules/rules.json" ):
     with open(rulesfile, 'r') as f:

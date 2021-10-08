@@ -1,5 +1,9 @@
+import logging
+
 from github import Github
 
+
+logger = logging.getLogger(__name__)
 
 def dummy_key(secret):
     """ 
@@ -53,8 +57,8 @@ def github_access_token(secret):
     try:
         h = Github(secret)
         user = h.get_user( )
-        print("This token is valid and belongs to " + user.login + "\n\n")
+        logging.info(f"This token is valid and belongs to {user.login}")
         return True
     except: # TODO specific exception handling
-        print("Mate, this token does not appear to be valid, so I will not record it!\n\n")
+        logging.info("Mate, this token does not appear to be valid, so I will not record it!")
         return False
