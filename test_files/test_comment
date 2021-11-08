@@ -3,6 +3,8 @@
 dummy_key_for_testing98326 = "yeet yeet"
 
 
+dummy_key_for_testing1ZZ26 = "yeet yeet"
+
 # This is a throwaway RSA key.  It's not being used.  See if
 # security scanner can catch it and comment in the right place
 -----BEGIN RSA PRIVATE KEY-----
