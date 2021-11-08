@@ -1,9 +1,9 @@
 
 
-dummy_key_for_testing98326 = "yeet yeet"
+
+dummy_key_for_testing9877653326 = "chicken noodle2"
 
 
-dummy_key_for_testing1ZZ26 = "yeet yeet"
 
 # This is a throwaway RSA key.  It's not being used.  See if
 # security scanner can catch it and comment in the right place
@@ -21,9 +21,20 @@ f32+L5Cu/pjKQCtjwSFJqv4yJa0/aH48cNhyLrk=
 -----END RSA PRIVATE KEY-----
 
 
-dummy_key_for_testing9877653326 = "chicken noodle2"
 
-
-
+# This is a throwaway RSA key.  It's not being used.  See if
+# security scanner can catch it and comment in the right place
+-----BEGIN RSA PRIVATE KEY-----
+MIIByQIBAAJhALwAHGVH1zMESgbTOLqwnrgyAOiM62ZDKIkp5AS7TAui9S/A+sTl
+NtO7LczhKSTiLoElPR4lfX5VLZDe8bbAGGeFe6FDVbtEOHxmQBb99f74lEm0CAVo
+KqJVc3np7d908QIDAQABAmBDAgsc8lk6vtmfyyNaL1+zKWd3e9rfbSqCkSLLqPJ2
+51Na/P6ktUowd3PgpZRjqBXrqx64WtyatG3PqlzAexJOer/47HMUgUUFlYuLXUcp
+6CwC+guWjRTDpMaZZPFOQsECMQD4aiU7P76+hsLQdP0E8tb2FQTc9Gp9cF43PIeG
+SixdWCUyjhktngkMnQqcFjcK/ykCMQDBvbVVnSD2AANykUugQfx7D584sTPZDWIw
+nm/W/2bJZ9GXdbuiWvSywbvAGWh6qIkCMBEwjyj9bT6T5rE0Fzobb8KRi8eaZjAN
+8YcS+jHRuiYvbkuER7u/XtLvnwdUBjUNmQIwB8KSfdBiXpgXi0I4lj2uYDt69Clc
+20fG9A2UizcFpfGLmpZzoogkHvjVjVc3MRqJAjBfHG+T7+n2ShLpfPQU6UXs7Tno
+f32+L5Cu/pjKQCtjwSFJqv4yJa0/aH48cNhyLrk=
+-----END RSA PRIVATE KEY-----
 
 
