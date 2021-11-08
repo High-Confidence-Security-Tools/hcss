@@ -1,7 +1,9 @@
 import re
+import logging
 
 from rules.rules import rules
 
+logger = logging.getLogger(__name__)
 
 # how far into the chunk is the secret?  We need this so we can do automated inline comments
 def offset_within_chunk( secret, chunk):
@@ -33,9 +35,9 @@ def scan_chunk( filename, chunk ):
         if match:
             for secret in match:
                 result = { "id": rule["id"], "rule": rule["name"], "file": filename, "secret": secret, "confirmed": False }
-                print("*************************************************************")
-                print(f"Found [{rule['id']}] {rule['name']} in file {filename}")
-                print(secret)
+                logger.info("*************************************************************")
+                logger.info(f"Found [{rule['id']}] {rule['name']} in file {filename}")
+                logger.info(secret)
 
                 if "validate" in rule:
                     result["confirmed"] = rule["validate"](secret)
@@ -68,7 +70,7 @@ def scan_diff( diff ):
             filename = line[4:]
             line_number = 0
             chunk = ""
-            print("File: " + filename)
+            logger.info("File: " + filename)
         elif line[0:4] == '--- ':       # the file before changes
             continue
         else:
